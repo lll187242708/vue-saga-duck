@@ -8,14 +8,15 @@ Vue 的模版化配置，使得 Vue 更加简单，但是随之而来的就是�
 - 如果是组件中相同逻辑的复用，需要抽离成单组件，或者使用 mixin 混入，比较混乱。
 - mixin 本身的特点，混入越多逻辑，越乱，并且容易相互覆盖影响。
 
-### 复用
-- 最好的方式还是通过 class 来进行相同类型逻辑的复用。比如页面类型的逻辑我们希望当前路由通过 extends 来继续这部分逻辑。
-- 所有的逻辑都写到 .vue 文件中，导致体积大、乱的问题。如果抽离出来进行直接的复用，可以组合到一起，实现最大程度的复用。
-- 在 vue 中如何使用 class
+### duck带来什么好处
+- 类的使用给 Vue 带来了“可拓展”的特性。
+- DuckMap 为 duck 带来了“可组合”特性。
+- 最终将极大的提高代码的复用性。
 
-### 为什么不使用 vuex，而使用 redux
+### 为什么没有使用 vuex，而使用 redux
 - Vuex 是通过 actions 来派发异步行为，可控性低。
 - Vue 生态圈没有提供像 redux-saga 一样的 vue-saga，所以先用 redux-saga（到时候搞一个 vue-saga，与 vuex 组合，可以换掉 redux, 毕竟融合度上来说还是 vuex 更贴切 vue）
+vuex 特性。 vue + react-saga
 
 # Getting started
 
@@ -65,7 +66,6 @@ export default {
     }
 }
 </script>
-
 ```
 
 ```js
