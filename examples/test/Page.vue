@@ -14,6 +14,7 @@ export default {
     },
     methods: {
         btn() {
+          
         },
         btn1() {
           console.log(this.store)
