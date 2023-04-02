@@ -50,21 +50,28 @@ export default connectWithDuck(Root, Duck);
 // Page.vue
 <template>
     <div>
-      数字：{{ store.count }}
-      <button @click="increment">三秒之后数字+10</button>
+        数字：{{ count }}
+        <button @click="increment">三秒之后数字+10</button>
     </div>
-  </template>
-<script>
+</template>
 
-export default {
+<script>
+import { defineComponent } from 'vue'
+export default defineComponent({
     props: ['dispatch', 'duck', 'store'],
-    methods: {
-        increment() {
-          const { creators } = this.duck;
-          this.dispatch(creators.add(10))
+    setup(props) {
+        const { duck, store, dispatch } = props;
+        const { creators, selectors } = duck
+        const count = selectors.count(store)
+        const increment = () => {
+            dispatch(creators.add(10))
+        }
+        return {
+            count,
+            increment
         }
     }
-}
+})
 </script>
 ```
 
@@ -95,13 +102,31 @@ class Home extends Duck {
       }
     };
   }
+  get creators(){
+    const { types } = this
+    return {
+      ...super.creators,
+      add(num){
+        return {
+          type: types.INCREMENT_ASYNC,
+          payload: num
+        }
+      }
+    }
+  }
+  get rawSelectors() {
+      return {
+        ...super.rawSelectors,
+        count: (state) => state.count
+      }
+  }
   *saga() {
     yield* super.saga();
     const { types, selector } = this;
     yield takeEvery(types.INCREMENT_ASYNC, function*() {
       yield call(delay, 3000);
       const { count } = selector(yield select());
-      yield put({type: types.INCREMENT});
+      yield put({type: types.INCREMENT, payload: action.payload});
     });
   }
 }
