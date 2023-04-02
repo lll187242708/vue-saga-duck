@@ -92,7 +92,10 @@ export default class DuckRuntime {
                         }
                     },
                     render(createElement) {
-                        return  createElement(Container, {props: this.$props})
+                        return  createElement(Container, {
+                            props: {...this.$props},
+                            key: new Date().getTime()
+                        })
                     }
                 }
             )

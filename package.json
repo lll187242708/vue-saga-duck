@@ -16,9 +16,9 @@
     "redux": "^4.2.1",
     "redux-logger": "^3.0.6",
     "redux-saga": "^1.2.3",
-    "redux-saga-catch": "^1.1.2",
+    "redux-saga-catch": "^1.1.0",
     "vue": "^2.6.14",
-    "vue-saga-duck": "^0.1.0"
+    "vue-saga-duck": "^1.1.0"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "~5.0.0",

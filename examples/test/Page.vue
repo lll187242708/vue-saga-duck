@@ -1,23 +1,25 @@
 <template>
     <div>
-      {{ store.foo }}
-      <button @click="btn">点我</button>
-      <button @click="btn1">点我</button>
+        数字：{{ count }}
+        <button @click="increment">三秒之后数字+10</button>
     </div>
-  </template>
-<script>
+</template>
 
-export default {
+<script>
+import { defineComponent } from 'vue'
+export default defineComponent({
     props: ['dispatch', 'duck', 'store'],
-    mounted() {
-      console.log(this.store);
-    },
-    methods: {
-        btn() {
-        },
-        btn1() {
-          console.log(this.store)
+    setup(props) {
+        const { duck, store, dispatch } = props;
+        const { creators, selectors } = duck
+        const count = selectors.count(store)
+        const increment = () => {
+            dispatch(creators.add(10))
+        }
+        return {
+            count,
+            increment
         }
     }
-}
+})
 </script>

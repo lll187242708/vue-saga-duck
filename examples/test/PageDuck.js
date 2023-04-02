@@ -1,60 +1,53 @@
-import { DuckMap } from 'vue-saga-duck';
+import {Duck} from 'vue-saga-duck';
+import { takeEvery, call, put, select, delay } from "redux-saga/effects";
 
-export default class Ducks extends DuckMap {
-    get quickTypes() {
-        const TYPES = {
-            SET_PARAMS: 1,
-            SET_RELOAD: 2,
-            SET_VAL: 3
+export default class extends Duck {
+  get quickTypes() {
+    return {
+      ...super.quickTypes,
+      INCREMENT: 1,
+      INCREMENT_ASYNC: 1,
+    };
+  }
+  get reducers() {
+    const { types } = this;
+    return {
+      ...super.reducers,
+      count: (state = 0, action) => {
+        switch (action.type) {
+          case types.INCREMENT:
+            return state + action.payload;
+          default:
+            return state;
         }
+      }
+    };
+  }
+  get creators(){
+    const { types } = this
+    return {
+      ...super.creators,
+      add(num){
         return {
-            ...super.quickTypes,
-            ...TYPES
+          type: types.INCREMENT_ASYNC,
+          payload: num
         }
+      }
     }
-    get rawTypes() {
-        return {
-            ...super.rawTypes,
-            AGE: 0
-        }
-    }
-    get reducers() {
-        const { types } = this;
-        return {
-            ...super.reducers,
-            foo(state = 1, actions) {
-                switch(actions.type) {
-                    case types.SET_VAL:
-                    
-                        console.log(actions.payload)
-                        return actions.payload;
-                        break;
-                    default:
-                        return state;
-                }
-            }
-        }
-    }
-    get quickDucks() {
-        return {
-            ...super.quickDucks,
-            // route: Ducksss
-        }
-    }
-    get creators() {
-        const { types } = this;
-        return {
-            ...super.creators,
-            reload(payload) {
-                return {type: types.SET_RELOAD, payload}
-            },
-            val(payload) {
-                return {type: types.SET_VAL, payload}
-            }
-        }
-    }
-    *saga() {
-        yield* super.saga();
-        const { types } = this;
-    }
+  }
+  get rawSelectors() {
+      return {
+        ...super.rawSelectors,
+        count: (state) => state.count
+      }
+  }
+  *saga() {
+    yield* super.saga();
+    const { types, selector } = this;
+    yield takeEvery(types.INCREMENT_ASYNC, function*(action) {
+      yield delay(3000);
+      const { count } = selector(yield select());
+      yield put({type: types.INCREMENT, payload: action.payload});
+    });
+  }
 }
